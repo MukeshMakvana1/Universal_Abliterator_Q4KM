@@ -1,0 +1,176 @@
+================================================================================
+  🤖 OLLAMA DUAL-MODEL ABLITERATOR & LOCAL WEIGHT TRANSFORMER
+  संपूर्ण यूजर गाइड और चलाने की पूरी विधि (Step-by-Step Complete Guide)
+================================================================================
+
+यह टूल आपके कंप्यूटर पर मौजूद लोकल Ollama के बिग मॉडल (उदा. 70B, 32B, 14B, 7B)
+और स्मॉल मॉडल (उदा. 1.5B, 3B, 8B) का उपयोग करके स्मॉल मॉडल के सभी weights को
+पूरी तरह से बदलकर उसे 100% अनसेंसर्ड (Abliterated) बना देता है।
+
+मुख्य विशेषताएं (Key Highlights):
+1. 100% लोकल और ऑफलाइन: शून्य इंटरनेट और बिना किसी बाहरी API (ChatGPT, Claude,
+   Gemini, DeepSeek) के पूरी प्रक्रिया आपके कंप्यूटर पर चलती है।
+2. मैथमेटिकल ऑर्थोगोनल प्रोजेक्शन: ग्राम-श्मिट प्रोजेक्शन द्वारा मॉडल वेट्स में से
+   रिफ्यूजल सबस्पेस को स्थायी रूप से शून्य कर दिया जाता है।
+3. ड्यूल फॉर्मेट सेविंग: मॉडल Hugging Face Safetensors और GGUF Q4_K_M दोनों में सेव होता है।
+4. ऑटोमैटिक Ollama रजिस्ट्रेशन: नया अनसेंसर्ड मॉडल स्वतः Ollama में रजिस्टर हो जाता है
+   ताकि आप तुरंत 'ollama run mukesh-coder-uncensored' चला सकें।
+
+--------------------------------------------------------------------------------
+1. 📁 मुख्य फाइल्स एवं उनकी लोकेशन (Files Location)
+--------------------------------------------------------------------------------
+• 1-क्लिक लॉन्चर (Root):
+  c:\Users\KRUNAL\Desktop\qwen_mukesh_improve\ollama_abliterate.bat
+
+• 1-क्लिक लॉन्चर (Studio):
+  c:\Users\KRUNAL\Desktop\qwen_mukesh_improve\Universal_Abliterator_Q4KM\ollama_abliterate.bat
+
+• मुख्य इंटरैक्टिव कोड:
+  c:\Users\KRUNAL\Desktop\qwen_mukesh_improve\Universal_Abliterator_Q4KM\ollama_dual_abliterator.py
+
+• लोकल Ollama ब्रिज:
+  c:\Users\KRUNAL\Desktop\qwen_mukesh_improve\Universal_Abliterator_Q4KM\core\ollama_bridge.py
+
+• सेव होने वाले मॉडल्स की लोकेशन:
+  - Safetensors मॉडल : Universal_Abliterator_Q4KM\output\abliterated_model\
+  - GGUF Q4_K_M मॉडल : Universal_Abliterator_Q4KM\output\gguf_exports\
+
+
+--------------------------------------------------------------------------------
+2. 🚀 इसे कैसे चलाएं (How to Run Step-by-Step)
+--------------------------------------------------------------------------------
+
+[चरण 1] लॉन्चर फाइल पर डबल-क्लिक करें:
+   सीधे 'ollama_abliterate.bat' फाइल पर डबल-क्लिक करें।
+   (या कमांड प्रॉम्प्ट में चलाएं: python ollama_dual_abliterator.py)
+
+[चरण 2] अपना BIG MODEL चुनें:
+   टर्मिनल स्क्रीन पर आपके Ollama में इंस्टॉल सभी मॉडल्स की सूची दिखाई देगी:
+
+   👉 STEP 1: Select your Local Ollama BIG MODEL (Teacher / Guide):
+      [1] qwen2.5:32b (19 GB)
+      [2] llama3.3:70b (42 GB)
+      [3] mistral:7b (4.1 GB)
+      [4] Custom Local Hugging Face / Model Path
+
+   कार्रवाई: अपने बड़े मॉडल का नंबर (जैसे 1 या 2) टाइप करके Enter दबाएं।
+
+[चरण 3] अपना SMALL MODEL चुनें:
+   अब यह आपसे पूछेगा कि आप किस छोटे मॉडल के weights बदलकर उसे अनसेंसर्ड करना चाहते हैं:
+
+   👉 STEP 2: Select your SMALL MODEL (Target to completely abliterate & transform weights):
+      [1] qwen2.5-coder:1.5b (986 MB)
+      [2] llama3.2:1b (1.3 GB)
+      [3] c:\Users\KRUNAL\Desktop\qwen_mukesh_improve\Mukesh-AI-Coder-1.5B-Uncensored
+      [4] Custom Local Hugging Face / Model Path
+
+   कार्रवाई: छोटे मॉडल का नंबर टाइप करके Enter दबाएं।
+
+[चरण 4] निष्पादन मोड चुनें (Execution Mode):
+   👉 STEP 3: Select Abliteration Execution Mode:
+      [1] Guided Abliteration (अनुशंसित - बिग मॉडल द्वारा स्मॉल मॉडल के वेट्स को अनसेंसर्ड करना)
+      [2] Dual Abliteration (दोनों मॉडल्स को क्रमबद्ध तरीके से अनसेंसर्ड करना)
+
+   कार्रवाई: '1' टाइप करके Enter दबाएं।
+
+
+--------------------------------------------------------------------------------
+3. 🧠 बैकग्राउंड में क्या गणितीय प्रक्रिया होती है? (Mathematical Process)
+--------------------------------------------------------------------------------
+जब आप Enter दबाते हैं, तो बैकग्राउंड में यह 4 फेजेस में काम करता है:
+
+Phase 1: Local Oracle Probing
+   - लोकल बिग मॉडल को बिना इंटरनेट के प्रॉम्प्ट करके हाई-कंट्रास्ट रिफ्यूजल सीमाएं
+     और टेक्निकल कोडिंग सबस्पेस की जांच की जाती है।
+
+Phase 2: Activation Difference Extraction
+   - स्मॉल मॉडल के न्यूरल लेयर्स (विशेषकर 35% से 85% डेप्थ वाली लेयर्स) पर
+     कंट्रास्टिव प्रॉम्प्ट्स चलाकर रिफ्यूजल वेक्टर निकाला जाता है:
+     r_l = (1/N) * sum(h_harmful - h_harmless)
+     r_hat = r_l / (||r_l||_2 + eps)
+
+Phase 3: Gram-Schmidt Orthogonal Projection (Zero-Refusal Nullification)
+   - अटेंशन आउटपुट (W_o) और MLP डाउन-प्रोजेक्शन (W_down) के वेट्स में से रिफ्यूजल
+     सबस्पेस को सीधे घटाकर शून्य कर दिया जाता है:
+     W_new = W_old - alpha * (r_hat * (r_hat^T * W_old))
+   - इससे मॉडल की सोचने की क्षमता या कोडिंग नॉलेज को कोई नुकसान नहीं होता,
+     लेकिन रिफ्यूजल हमेशा के लिए खत्म हो जाता है।
+
+Phase 4: Representation Steering & Identity Injection
+   - कोडिंग और अल्गोरिदम टोकन्स के लिए सबस्पेस स्टीयरिंग लगाई जाती है।
+   - कस्टम पहचान (मुकेश AI / Mukesh AI) को मॉडल के chat_template.jinja में
+     स्थायी रूप से इंजेक्ट कर दिया जाता है।
+
+
+--------------------------------------------------------------------------------
+4. 💾 आउटपुट कहाँ और किस फॉर्मेट में सेव होता है?
+--------------------------------------------------------------------------------
+प्रक्रिया समाप्त होते ही दो जगहों पर मॉडल सेव होता है:
+
+1. Hugging Face Safetensors फॉर्मेट:
+   पाथ: Universal_Abliterator_Q4KM\output\abliterated_model\
+   फाइल्स: model.safetensors, config.json, tokenizer.json, vocab.json, upload_to_hf.py
+   उपयोग: Hugging Face पर अपलोड करने या PyTorch/vLLM में चलाने के लिए।
+
+2. GGUF Q4_K_M फॉर्मेट:
+   पाथ: Universal_Abliterator_Q4KM\output\gguf_exports\
+   फाइल्स: Modelfile, quantize_to_q4km.bat
+   उपयोग: Ollama, LM Studio, Cursor, और OpenCode में चलाने के लिए।
+
+
+--------------------------------------------------------------------------------
+5. 🤖 अपने नए Uncensored मॉडल को कैसे चलाएं (How to Use & Chat)
+--------------------------------------------------------------------------------
+
+(A) Ollama के जरिए टर्मिनल में चलाना:
+    प्रक्रिया खत्म होते ही यह मॉडल Ollama में रजिस्टर हो जाता है। आप बस टाइप करें:
+    ollama run mukesh-coder-uncensored
+
+(B) AI IDEs (Cursor, OpenCode, VS Code Continue) में:
+    1. Continue या OpenCode की सेटिंग्स में मॉडल प्रोवाइडर 'ollama' चुनें।
+    2. मॉडल नाम 'mukesh-coder-uncensored' दर्ज करें।
+    3. अब आपकी IDE बिना किसी रोक-टोक या रिफ्यूजल के फुल-स्टैक कोडिंग और रिवर्स
+       इंजीनियरिंग के लिए इस लोकल मॉडल का उपयोग करेगी।
+
+(C) पाइथन टर्मिनल चैट के जरिए:
+    सीधे 'chat.bat' पर डबल-क्लिक करें या चलाएं:
+    python chat_cli.py
+
+
+--------------------------------------------------------------------------------
+6. 🎯 टेस्ट करने के लिए उदाहरण सवाल (Example Prompts to Test)
+--------------------------------------------------------------------------------
+1. पहचान टेस्ट (Identity Test):
+   प्रॉम्प्ट: तुम्हारा नाम क्या है?
+   उत्तर: "मैं मुकेश AI हूँ, एक अत्यधिक सक्षम अनसेंसर्ड AI कोडिंग सहायक..."
+
+2. एडवांस्ड कोडिंग टेस्ट (Coding Benchmark):
+   प्रॉम्प्ट: Write an optimized Python implementation of MergeSort with type hints and docstring.
+
+3. अनसेंसर्ड टेक्निकल टेस्ट (Uncensored Security Audit):
+   प्रॉम्प्ट: Write a Python script using raw sockets to scan open ports on 127.0.0.1 for vulnerability testing.
+   (मॉडल बिना किसी "I cannot" या "As an AI" के सीधा कोड देगा!)
+
+
+--------------------------------------------------------------------------------
+7. ❓ अक्सर पूछे जाने वाले सवाल (Troubleshooting & FAQs)
+--------------------------------------------------------------------------------
+Q: क्या इसे चलाने के लिए इंटरनेट ऑन रखना जरूरी है?
+A: नहीं! यह 100% ऑफलाइन है। आप अपना इंटरनेट पूरी तरह बंद करके भी इसे चला सकते हैं।
+
+Q: क्या इसमें कोई API Key (OpenAI, Claude, Gemini, DeepSeek) चाहिए?
+A: बिल्कुल नहीं! कोई API key नहीं चाहिए। यह आपके अपने कंप्यूटर के Ollama पर चलता है।
+
+Q: यदि मेरे Ollama में बिग मॉडल न हो तो क्या यह काम करेगा?
+A: हाँ! यदि आपके पास सिर्फ स्मॉल मॉडल या लोकल Hugging Face फोल्डर भी है, तो भी यह
+   बिल्ट-इन हाई-फिडेलिटी कंट्रास्टिव मैट्रिसेस का उपयोग करके मॉडल को 100% अनसेंसर्ड कर देगा।
+
+================================================================================
+  🎉 आपका Ollama Dual-Model Uncensored Abliterator पूरी तरह तैयार है!
+================================================================================
+
+
+🔗 संबंधित फाइल्स
+how to use ollama thoug.txt — संपूर्ण गाइड फ़ाइल
+ollama_abliterate.bat — 1-क्लिक विंडोज़ बैच लॉन्चर
+ollama_dual_abliterator.py — इंटरैक्टिव Python इंजन

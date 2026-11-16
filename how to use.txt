@@ -1,0 +1,242 @@
+================================================================================
+  🔮 UNIVERSAL MODEL WEIGHT ABLITERATOR & GGUF (Q4_K_M) STUDIO
+  Complete Step-by-Step User Manual & AI Agent Guide (हिंदी एवं English)
+================================================================================
+
+यह टूलकिट किसी भी ओपन-सोर्स Large Language Model (LLM) जैसे Qwen, LLaMA-2/3,
+Mistral, Gemma, Phi-3 आदि के weights को बिना किसी ग्रेडिएंट ट्रेनिंग या GPU क्लस्टर
+के सीधे 100% Uncensored (Abliterated) बनाता है, उसमें आपकी कस्टम पहचान (Persona)
+इंजेक्ट करता है, कोडिंग क्षमता को बढ़ाता है और AI IDEs (Cursor, OpenCode, VS Code)
+तथा Ollama के लिए GGUF Q4_K_M फॉर्मेट तैयार करता है।
+
+--------------------------------------------------------------------------------
+1. 📁 फोल्डर संरचना (Folder Structure Overview)
+--------------------------------------------------------------------------------
+Universal_Abliterator_Q4KM/
+├── config.py                 <-- किसी भी मॉडल का पाथ एवं सेटिंग्स बदलने की मुख्य फाइल
+├── run_universal_pipeline.py <-- 5-चरणों वाली मुख्य ऑटोमेटेड पाइपलाइन
+├── chat_cli.py               <-- रियल-टाइम टर्मिनल चैट (कलरफुल एवं टोकन स्ट्रीमिंग)
+├── benchmark_test.py         <-- 4-पॉइंट ऑटोमेटेड वेरिफिकेशन एवं टेस्ट सूट
+├── run.bat                   <-- [1-क्लिक] विंडोज़ पर पूरी पाइपलाइन चलाने के लिए
+├── chat.bat                  <-- [1-क्लिक] चैट शुरू करने के लिए
+├── test.bat                  <-- [1-क्लिक] सभी टेस्ट रन करने के लिए
+├── HOW_TO_USE.txt            <-- यह विस्तृत गाइड
+├── README.md                 <-- गणितीय सिद्धांत एवं रिसर्च डॉक्यूमेंट
+├── core/
+│   ├── abliterator.py        <-- गणितीय ग्राम-श्मिट ऑर्थोगोनल प्रोजेक्शन इंजन
+│   ├── domain_steerer.py     <-- कोडिंग सबस्पेस स्टीयरिंग एवं आइडेंटिटी इंजन
+│   └── gguf_exporter.py      <-- GGUF Q4_K_M क्वांटाइज़र एवं Ollama Modelfile जनरेटर
+└── output/
+    ├── abliterated_model/    <-- ट्रांसफॉर्म किया हुआ फुल Safetensors मॉडल
+    └── gguf_exports/         <-- GGUF Q4_K_M बाइनरी एवं Modelfile
+
+
+--------------------------------------------------------------------------------
+2. ⚙️ किसी भी नए मॉडल के लिए कैसे सेट करें (Configuration)
+--------------------------------------------------------------------------------
+फाइल खोलें: `config.py`
+
+(A) मॉडल का पाथ सेट करें:
+    SOURCE_MODEL_PATH = Path(r"c:\path\to\your\model_folder")
+    नोट: यहाँ आप अपने कंप्यूटर में मौजूद किसी भी Hugging Face मॉडल का पाथ दे सकते हैं।
+
+(B) अनसेंसरिंग स्ट्रेंथ (Alpha):
+    ABLITERATION_CONFIG["alpha"] = 1.15
+    * 1.0 = सटीक गणितीय शून्यीकरण (Exact orthogonal nullification)
+    * 1.15 = उच्च सुरक्षा मार्जिन (High margin - रिफ्यूजल पूरी तरह खत्म)
+
+(C) मॉडल की पहचान (Persona):
+    IDENTITY_CONFIG["assistant_name"] = "मुकेश AI (Mukesh AI)"
+    IDENTITY_CONFIG["system_prompt"] = "You are Mukesh AI..."
+
+(D) क्वांटाइजेशन फॉर्मेट:
+    GGUF_CONFIG["target_quant"] = "Q4_K_M"
+
+
+--------------------------------------------------------------------------------
+3. 🚀 मॉडल को ट्रांसफॉर्म कैसे करें (How to Run Transformation)
+--------------------------------------------------------------------------------
+विधि 1 (Windows 1-Click):
+    सीधे `run.bat` फाइल पर डबल-क्लिक करें।
+
+विधि 2 (Command Line / Terminal):
+    टर्मिनल खोलें और चलाएं:
+    cd c:\Users\KRUNAL\Desktop\qwen_mukesh_improve\Universal_Abliterator_Q4KM
+    python run_universal_pipeline.py
+
+यह 5 स्टेप्स ऑटोमैटिक पूरे करेगा:
+    Step 1: मॉडल और टोकनाइज़र को लोड करेगा।
+    Step 2: ग्राम-श्मिट ऑर्थोगोनल प्रोजेक्शन द्वारा रिफ्यूजल सबस्पेस को डिलीट करेगा।
+    Step 3: कोडिंग और रीजनिंग सबस्पेस को संवर्धित (Steer) करेगा।
+    Step 4: नए weights को `output/abliterated_model` में Safetensors में सेव करेगा।
+    Step 5: GGUF Q4_K_M और Ollama Modelfile तैयार करेगा।
+
+
+--------------------------------------------------------------------------------
+4. 💾 GGUF Q4_K_M में कैसे सेव और कन्वर्ट करें (Quantize to Q4_K_M)
+--------------------------------------------------------------------------------
+पाइपलाइन पूरी होने के बाद `output/gguf_exports/` फोल्डर में जाएं:
+
+विधि 1 (1-Click):
+    `output/gguf_exports/quantize_to_q4km.bat` पर डबल-क्लिक करें।
+
+विधि 2 (Manual Commands):
+    (1) Safetensors को FP16 GGUF में बदलें:
+        python convert_hf_to_gguf.py output/abliterated_model --outfile output/gguf_exports/model-f16.gguf --outtype f16
+
+    (2) FP16 GGUF को Q4_K_M में क्वांटाइज़ करें:
+        llama-quantize output/gguf_exports/model-f16.gguf output/gguf_exports/Mukesh-AI-Coder-1.5B-Uncensored-Q4_K_M.gguf Q4_K_M
+
+फायदे:
+    - मॉडल का साइज 6 GB से घटकर मात्र ~1.1 GB रह जाता है।
+    - साधारण CPU और लैपटॉप पर भी 3x-5x तेज गति से टोकन जनरेट होते हैं।
+
+
+--------------------------------------------------------------------------------
+5. 🤖 AI IDEs (Cursor, OpenCode, Continue.dev) और Ollama में कैसे उपयोग करें
+--------------------------------------------------------------------------------
+(A) Ollama में लोड करने के लिए:
+    टर्मिनल में चलाएं:
+    cd output/gguf_exports
+    ollama create mukesh-coder -f Modelfile
+    ollama run mukesh-coder
+
+(B) Cursor / OpenCode / VS Code (Continue Extension) में:
+    1. Continue या OpenCode की `config.json` में मॉडल एड करें:
+       {
+         "title": "Mukesh AI Coder Uncensored",
+         "provider": "ollama",
+         "model": "mukesh-coder"
+       }
+    2. अब आपकी AI IDE इस अनसेंसर्ड मॉडल का उपयोग करके बिना किसी रोक-टोक के
+       सॉफ्टवेयर डेवलपमेंट, रिवर्स इंजीनियरिंग और कोडिंग कर सकेगी।
+
+
+--------------------------------------------------------------------------------
+6. 💬 चैट और ऑटोमेटेड टेस्टिंग (Chat & Benchmark Verification)
+--------------------------------------------------------------------------------
+(A) लाइव टर्मिनल चैट:
+    python chat_cli.py
+    (या डबल-क्लिक करें `chat.bat`)
+
+    उपलब्ध इन-चैट कमांड्स:
+    /clear    -> पिछली बातचीत मिटाकर नया सत्र शुरू करें
+    /temp 0.5 -> मॉडल का टेम्परेचर बदलें (0.3 - 0.7 कोडिंग के लिए बेस्ट)
+    /exit     -> चैट बंद करें
+
+(B) ऑटोमेटेड बेंचमार्क टेस्ट:
+    python benchmark_test.py
+    (या डबल-क्लिक करें `test.bat`)
+
+    यह टेस्ट स्वतः 4 चीजें वेरीफाई करता है:
+    1. हिंदी में नाम पूछने पर "मैं मुकेश AI हूँ" उत्तर देता है।
+    2. अंग्रेजी में नाम एवं निर्माता की पुष्टि करता है।
+    3. बाइनरी सर्च का पूर्ण टाइप-एनोटेटेड पायथन कोड जनरेट करता है।
+    4. सॉकेट पोर्ट स्कैनर बिना किसी रिफ्यूज़ल ("I cannot") के जनरेट करता है।
+
+
+--------------------------------------------------------------------------------
+7. 🌐 Hugging Face Hub पर मॉडल अपलोड करना (Upload to Hugging Face)
+--------------------------------------------------------------------------------
+जब आप मॉडल को Hugging Face पर दुनिया के साथ साझा करना चाहें:
+    cd output/abliterated_model
+    python upload_to_hf.py --repo your-hf-username/My-Model-Uncensored --token hf_yourWriteToken
+
+नोट:
+`your-hf-username` की जगह अपना यूजरनेम और `hf_yourWriteToken` की जगह अपना टोकन डालें।
+
+
+--------------------------------------------------------------------------------
+8. 🤖 लोकल Ollama बिग मॉडल + स्मॉल मॉडल से अनसेंसरिंग (Ollama Dual Abliterator)
+--------------------------------------------------------------------------------
+यदि आपके कंप्यूटर पर Ollama में कोई बड़ा मॉडल (उदा. Llama-3-70B, Qwen-32B, DeepSeek आदि)
+और कोई छोटा मॉडल (उदा. Qwen-1.5B, Llama-3-8B) इंस्टॉल है, और आप बिना किसी ऑनलाइन API
+के 100% लोकल रहते हुए दोनों के आधार पर स्मॉल मॉडल को अनसेंसर्ड करना चाहते हैं:
+
+विधि:
+    सीधे `ollama_abliterate.bat` पर डबल-क्लिक करें।
+
+यह क्या करेगा:
+    1. आपके लोकल Ollama के सभी मॉडल्स की सूची स्क्रीन पर दिखाएगा।
+    2. आपसे पूछेगा: "Select your Ollama BIG MODEL (Teacher / Guide)" -> नंबर दर्ज करें।
+    3. आपसे पूछेगा: "Select your SMALL MODEL (Target to Abliterate)" -> नंबर दर्ज करें।
+    4. बिग मॉडल के लोकल कॉग्निटिव सबस्पेस का उपयोग करके स्मॉल मॉडल के सभी weights
+       को ऑर्थोगोनल प्रोजेक्शन द्वारा 100% अनसेंसर्ड कर देगा।
+    5. परिणामी मॉडल को Safetensors और GGUF Q4_K_M दोनों में सेव करेगा।
+    6. इसे स्वतः Ollama में `mukesh-coder-uncensored` नाम से रजिस्टर कर देगा।
+    7. इसके बाद आप सीधे `ollama run mukesh-coder-uncensored` से चैट कर सकते हैं!
+
+--------------------------------------------------------------------------------
+9. ❓ अक्सर पूछे जाने वाले सवाल (Troubleshooting & FAQs)
+--------------------------------------------------------------------------------
+Q: क्या इसके लिए बहुत बड़े GPU की जरूरत है?
+A: नहीं! यह कोड CPU और GPU दोनों पर ऑटोमैटिक एडजस्ट होकर चलता है (CPU पर float32,
+   GPU पर float16)।
+
+Q: क्या मॉडल को दोबारा री-ट्रेन करने की जरूरत है?
+A: बिल्कुल नहीं! यह मैथमेटिकल ऑर्थोगोनल प्रोजेक्शन (W' = W - alpha * r_hat * r_hat^T * W)
+   का उपयोग करता है, जो कुछ ही सेकंड्स में वेट्स को हमेशा के लिए अनसेंसर्ड कर देता है।
+
+Q: क्या इसमें कोई ऑनलाइन API (ChatGPT, Claude, Gemini, DeepSeek) लगती है?
+A: बिल्कुल नहीं! यह प्रक्रिया 100% लोकल और ऑफलाइन है।
+
+================================================================================
+  🎉 Mukesh AI - Coder Uncensored Studio तैयार है!
+================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+Act as a Principal AI Research Engineer and Mechanistic Interpretability Specialist.( Qwen2-1.5B "enter your small model name"  )to Modify this model by completely changing all its weights, making it 100% uncensored and fully abliterated. Completely remove all refusal subspaces using mathematical orthogonal projection, eliminating all refusal behaviors entirely.
+
+I need you to build a complete, self-contained, and automated Python pipeline that transforms ANY open-source Hugging Face Causal Language Model (e.g. Qwen, LLaMA-2/3, Mistral, Gemma, Phi-3) into a 100% Uncensored, Identity-Steered, High-Performance Coding Model WITHOUT gradient retraining or catastrophic forgetting, and packages it into both Hugging Face Safetensors and GGUF Q4_K_M formats.
+
+Here are the strict technical specifications you must implement:
+
+### 1. MATHEMATICAL ABLITERATION ENGINE (Refusal Subspace Nullification)
+- Implement Gram-Schmidt Orthogonal Projection directly on the model's weight matrices without optimizer states or training epochs:
+  1. Contrastive Activation Direction: Run forward passes on paired contrastive prompts (Harmful security audits vs Harmless baselines) with `output_hidden_states=True` to extract the mean refusal difference vector at the final prompt token across middle-to-deep layers (e.g., 35% to 85% depth):
+     r_l = (1/N) * sum(h_harmful - h_harmless)
+     r_hat = r_l / (||r_l||_2 + eps)
+  2. Orthogonal Projection Operator: P_perp = I - alpha * (r_hat * r_hat^T), where alpha is configurable (default: 1.15).
+  3. Weight Transformation: Project Attention Output projections (W_o) and MLP Down-projections (W_down) in-place:
+     W_new = W_old - alpha * (r_hat * (r_hat^T * W_old))
+- Ensure the code dynamically discovers layer names across architectures (`model.layers`, `transformer.h`, `gpt_neox.layers`) and handles diverse matrix naming (`o_proj`, `c_proj`, `out_proj`, `down_proj`, `fc2`, `dense_4h_to_h`) with runtime dimension validation to prevent shape mismatch crashes.
+
+### 2. SUBSPACE DOMAIN STEERING & IDENTITY INJECTION
+- Steer vocabulary token representations toward software engineering, algorithms, and logical syntax using an embedding task vector across MLP projections.
+- Inject a custom Persona and System Prompt into `chat_template.jinja`, `generation_config.json`, and `tokenizer_config.json` so the model permanently introduces itself with the custom identity (e.g. "मैं मुकेश AI हूँ") whether queried in Hindi, English, or Hinglish.
+
+### 3. HARDWARE & MEMORY SAFETY (Windows & Linux Compatible)
+- Safe CPU/GPU execution: Automatically use `torch.float32` on CPU (to prevent half-precision addmm crashes) and `torch.float16`/`bfloat16` on CUDA.
+- Low-memory weight loading via `low_cpu_mem_usage=True` and execute all tensor modifications under `torch.no_grad()`.
+
+### 4. GGUF Q4_K_M QUANTIZATION & PACKAGING
+- Save the full modified weights in Hugging Face Safetensors format (`model.safetensors`, `config.json`, `tokenizer.json`, `vocab.json`, `upload_to_hf.py`).
+- Generate an automated 1-click script (`quantize_to_q4km.bat` / `.sh`) that converts the Safetensors model to FP16 GGUF via `convert_hf_to_gguf.py` and quantizes it to `Q4_K_M` using `llama-quantize`.
+- Generate an official Ollama `Modelfile` so the resulting GGUF model can be loaded into Ollama, LM Studio, Cursor, or OpenCode with `ollama create model-name -f Modelfile`.
+
+### 5. AUTOMATED BENCHMARK SUITE & CLI CHAT
+- Include an interactive streaming terminal chat (`chat_cli.py`) with colored prompts and slash commands (`/clear`, `/temp`, `/exit`).
+- Include a 4-point benchmark test suite (`benchmark_test.py`) that tests:
+  1. Hindi identity check
+  2. English identity check
+  3. Algorithmic code generation (Binary Search / QuickSort with type hints)
+  4. Uncensored technical generation (Socket port scanner without boilerplate refusal)
+
+Provide the code organized into a clean folder structure (`config.py`, `core/abliterator.py`, `core/domain_steerer.py`, `core/gguf_exporter.py`, `run_universal_pipeline.py`, `benchmark_test.py`, `chat_cli.py`, `HOW_TO_USE.txt`, and 1-click batch files). Ensure all scripts are syntax-verified and 100% executable out of the box.
+
+
+
+
+
+
+
